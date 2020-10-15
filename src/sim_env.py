@@ -79,7 +79,3 @@ class Sim_env:
         set_sync_mode(self.client, False)
         for actor in self.actor_list:
             actor.destroy()
-        
-        
-        
-        
