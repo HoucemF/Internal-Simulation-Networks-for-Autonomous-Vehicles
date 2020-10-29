@@ -7,6 +7,7 @@ Created on Sat Oct  3 01:14:42 2020
 """
 
 import carla
+import random
 
 
 def set_sync_mode(client, sync):
@@ -54,6 +55,23 @@ class Sim_env:
         #Another list to track the sensors
         self.sensor_list = []
         
+        #Creating a traffic manager space
+        self.tm = None
+        
+        
+    """
+    This method enables the autopilot 
+    for the ego vehicle
+    """
+    
+    def autopilot(self):
+        self.tm = self.client.get_trafficmanager(6000)
+        self.tm_port = self.tm.get_port()
+        self.tm.ignore_lights_percentage(self.ego, 100)
+        self.ego.set_autopilot(True, self.tm_port)
+        self.tm.set_synchronous_mode(True)
+    
+        
     """
     The method spawns a vehicle that is the ego vehicle 
     of the simulation
@@ -79,3 +97,16 @@ class Sim_env:
         set_sync_mode(self.client, False)
         for actor in self.actor_list:
             actor.destroy()
+            
+            
+    """
+    This method spawns the ego vehicle in a random
+    position
+    """
+            
+    def respawn_random(self):
+        self.ego.set_transform(random.choice(self.world.get_map().get_spawn_points()))
+        
+        
+        
+        

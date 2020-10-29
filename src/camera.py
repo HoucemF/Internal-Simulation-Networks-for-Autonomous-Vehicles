@@ -21,19 +21,27 @@ class Camera:
     """
     We define the constructor
     for the camera, it can define its
-    different parameters. 
+    different parameters. You can choose 
+    between a segmented image and a regular 
+    image
     """
     
-    def __init__(self, world, blueprints, ego, resx=112, resy=112, fov=70):
-        camera_bp = blueprints.find('sensor.camera.rgb')
-        camera_bp.set_attribute("image_size_x",str(112))
-        camera_bp.set_attribute("image_size_y",str(112))
+    def __init__(self, world, blueprints, ego, segmentation ,resx=112, resy=112, fov=90):
+        self.segmentation = segmentation
+        if self.segmentation == True:
+            camera_bp = blueprints.find('sensor.camera.semantic_segmentation')
+            print('sensor.camera.semantic_segmentation')
+        else:
+            camera_bp = blueprints.find('sensor.camera.rgb')
+
+        
+        camera_bp.set_attribute("image_size_x",str(resx))
+        camera_bp.set_attribute("image_size_y",str(resy))
         camera_bp.set_attribute('fov', str(fov))
         
         self.queue = Queue()
-        
-        self.camera = world.spawn_actor(camera_bp, carla.Transform(carla.Location(x=2.5, z=0.7)) , attach_to = ego)
-        self.camera.listen(lambda img : self.queue.put(carlaimg_to_numpy(img)))
+        self.camera = world.spawn_actor(camera_bp, carla.Transform(carla.Location(x=2.5, z=1.7), carla.Rotation(pitch= -45)) , attach_to = ego)
+        self.camera.listen(lambda img : self.queue.put(carlaimg_to_numpy(img, self.segmentation)))
         
     def get(self):
         image = None
