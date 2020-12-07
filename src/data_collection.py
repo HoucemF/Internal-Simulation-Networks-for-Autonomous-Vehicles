@@ -8,7 +8,7 @@ Created on Sat Oct  3 22:55:53 2020
 
 from sim_env import Sim_env
 from camera import Camera
-from control import babbling_angle
+import random
 import pickle
 import sys
 import getopt
@@ -58,7 +58,7 @@ def main(argv):
     
     
     #Defining the environement and getting the actors
-    env = Sim_env()
+    env = Sim_env(town = "Town03")
     env.spawn_ego()
     camera = Camera(env.world, env.blueprints, env.ego, segmentation)
     rgb_camera = Camera(env.world, env.blueprints, env.ego, False)
@@ -90,6 +90,8 @@ def main(argv):
         env.ego.get_location() + carla.Location(z=50),
         carla.Rotation(pitch=-90)))
         
+        if i % 500 == 0:
+            env.tm.force_lane_change(env.ego, random.choice([True,  False]))
         
         #Every cycle of frames apply motor control and get sensor output
         if i % frame_skip == 0:

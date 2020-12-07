@@ -40,15 +40,8 @@ forward and backwards
 
 
 def babbling_angle():
-    
-    command =  []
-    
-    dice_roll = random.uniform(0, 1)
-    if dice_roll < 0.6:
-        command = [1, random.normalvariate(0, 0.3), 0, 0] # The car moves forward
-    else: 
-        command = [1,1 - random.uniform(-1,1), 0, 1] # The car moves backwards
-    
+        
+    command = [random.uniform(-1, 1), random.uniform(-0.5, 0.5), 0, 0] # The car moves forward
     car_command = command.copy()
         
     if command[3] == 0: 
