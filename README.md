@@ -55,7 +55,7 @@ To execute the work, first run carla using
 ```
 ./CarlaUE4.sh -quality-level=Low
 ```
-Then execute the driver script 
+Then execute the driver script and load Models/Model_v2.h5. There are three reference images in src that can be used. 
 ```
 python src/driver.py -w <Weights path> -r <Reference image path> -a <Alpha value>
 ```
