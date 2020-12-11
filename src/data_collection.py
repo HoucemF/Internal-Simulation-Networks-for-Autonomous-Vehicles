@@ -38,12 +38,12 @@ def main(argv):
     try:
         opts, args = getopt.getopt(argv, "he:f:p:s:")
     except getopt.GetoptError:
-        print("data_collection -p <Save path> -e <number of episodes> -f <number of frames skipped> -s <Segmentation Flag>")       
+        print("data_collection -p <Save path> -e <number of episodes> -f <number of frames skipped>")       
         sys.exit(2)
         
     for opt, arg in opts:
         if opt == '-h':
-             print ("data_collection -p <Save path> -e <number of episodes> -f <number of frames skipped> -s <Segmentation Flag>")    
+             print ("data_collection -p <Save path> -e <number of episodes> -f <number of frames skipped>")    
              sys.exit()
         elif opt == "-p":
              save_path = Path(arg)
@@ -51,11 +51,8 @@ def main(argv):
              episodes = int(arg)
         elif opt == "-f":
              frame_skip = int(arg)
-        elif opt == "-s":
-             segmentation = bool(arg)
-             
-    print(segmentation)
-    
+
+                 
     
     #Defining the environement and getting the actors
     env = Sim_env(town = "Town03")

@@ -32,7 +32,6 @@ def main(argv):
     """
 
 
-    episodes = 250000
     frame_skip = 5
     home_path = Path.home()
     save_path = (home_path / 'data_babbling_5')
@@ -42,19 +41,16 @@ def main(argv):
     try:
         opts, args = getopt.getopt(argv, "he:f:p:")
     except getopt.GetoptError:
-        print("data_collection_angle -p <Save path> -e <number of episodes> -f <number of frames skipped>")
+        print("data_collection_angle -p <Save path>")
         sys.exit(2)
 
     for opt, arg in opts:
         if opt == '-h':
-            print ("data_collection_angle -p <Save path> -e <number of episodes> -f <number of frames skipped>")
+            print ("data_collection_angle -p <Save path>")
             sys.exit()
         elif opt == "-p":
             save_path = Path(arg)
-        elif opt == "-e":
-            episodes = int(arg)
-        elif opt == "-f":
-            frame_skip = int(arg)
+        
 
 
     #Defining the environement 

@@ -14,19 +14,43 @@ import carla
 from cv2 import imread
 import numpy as np
 from skimage.measure import compare_mse, compare_ssim
+import sys
+import getopt
+from pathlib import Path
 
 def autoregressive_filter(previous_angle, best_angle, alpha):
     return alpha * best_angle + (1 - alpha) * previous_angle
 
-def main():
+def main(argv):
+    
+    alpha = 0.9
+    
+    #Reading arguments
+    try:
+        opts, args = getopt.getopt(argv, "he:w:r:a:")
+    except getopt.GetoptError:
+        print("driver -w <Weights path> -r <Reference image path> -a <Alpha value>")       
+        sys.exit(2)
+        
+    for opt, arg in opts:
+        if opt == '-h':
+             print ("driver -w <Weights path> -r <Reference image path> -a <Alpha value>")    
+             sys.exit()
+        elif opt == "-w":
+             weights_path = str(arg)
+        elif opt == "-r":
+             ref_path = str(arg)
+        elif opt == "-a":
+             alpha = float(arg)
     
     #Defining the model
     models = sensorimotor_model_v2()
     
     #Path to weights
-    weights_path = "/home/houcem/Houcem/experimentation/babbling_model_babbling_SSIM.h5"
+    weights_path = weights_path
     
     #Applying the weights
+    models.encoder.trainable = False
     models.model.load_weights(weights_path)
     print("Weights Loaded")
         
@@ -34,9 +58,9 @@ def main():
     model = models.model
     encoder = models.encoder
     mlp = models.mapping_mlp
-    
+        
     #Reference Image
-    ref = imread("/home/houcem/Documents/Motor Babbling/src/reference_image1.png")
+    ref = imread(ref_path)
     ref = ref/255.0
     ref = ref.reshape([112,112,3])
     ref_vector = encoder.predict(ref.reshape([1,112,112,3]))
@@ -85,11 +109,11 @@ def main():
             motor_command = np.asarray([0.2, angle])  
             motor_command = motor_command.reshape([1,2])
             imagined_vec = mlp.predict([image_vec, motor_command]) 
-            angles_score[angle] = cosine(imagined_vec, ref_vector)
+            angles_score[angle] = correlation(imagined_vec, ref_vector)
             
             
         best_angle = max(angles_score, key = angles_score.get)
-        driving_angle = autoregressive_filter(previous_angle , best_angle , 0.1)
+        driving_angle = autoregressive_filter(previous_angle , best_angle , 0.4)
         print(driving_angle)
         
         env.ego.apply_control(carla.VehicleControl(throttle = 0.2, steer = driving_angle, brake = 0, reverse = 0))
@@ -98,4 +122,5 @@ def main():
         i = i+1
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1:])
+    

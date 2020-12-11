@@ -10,6 +10,8 @@ from glob import glob
 import pandas as pd
 from pathlib import Path
 import pickle
+import sys
+import getopt
 
 
 """
@@ -66,9 +68,25 @@ class build_csv:
         return 
     
 
-def main():
+def main(argv):
     path = Path("/home/houcem/data_val/")
+
+    
+    #Reading arguments
+    try:
+        opts, args = getopt.getopt(argv, "he:f:p:s:")
+    except getopt.GetoptError:
+        print("build_csv -p <Save path> ")       
+        sys.exit(2)
+        
+    for opt, arg in opts:
+        if opt == '-h':
+             print ("build_csv -p <Save path>")    
+             sys.exit()
+        elif opt == "-p":
+             path = Path(arg)
+       
     csv_builder = build_csv(path)
     
 if __name__ == "__main__" :
-    main();
+    main(sys.argv[1:]);

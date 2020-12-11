@@ -42,7 +42,7 @@ class sensorimotor_model_v2:
         x = MaxPooling2D()(x)
         x = Flatten()(x)
         
-        z = Dense(128, activation = 'sigmoid', activity_regularizer= keras.regularizers.l1(1e-4))(x)
+        z = Dense(128, activation = 'sigmoid')(x)
         
         encoder = Model(inputs= [image_input], outputs = [z])
         
