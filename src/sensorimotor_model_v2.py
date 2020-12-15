@@ -22,6 +22,7 @@ class sensorimotor_model_v2:
         self.encoder = self.make_encoder()
         self.decoder = self.make_decoder()
         self.mapping_mlp = self.make_mapping_mlp()
+        self.autoencoder = self.make_autoencoder(self.encoder, self.decoder)
         self.model = self.make_model(self.encoder, self.decoder, self.mapping_mlp)
 
 
@@ -100,5 +101,16 @@ class sensorimotor_model_v2:
         babbling_model = Model(inputs = [img_input, motor_input], outputs = Decoded)
         
         return(babbling_model)
+    
+    #Create the autoencoder
+    def make_autoencoder(self, encoder, decoder):
+        img_input = Input(shape=(112, 112, 3), name = "img")
+        
+        Encoded = encoder([img_input])
+        Decoded = decoder(Encoded)
+        
+        autoencoder = Model(inputs = img_input, outputs = Decoded)
+        
+        return(autoencoder)
                
         
