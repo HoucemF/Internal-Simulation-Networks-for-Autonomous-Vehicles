@@ -28,7 +28,7 @@ def SSIM_l1_loss(y_true, y_pred):
 
 def main(argv):
     
-    BATCH_SIZE = 50
+    batch_size = 50
     train_csv_path = "/home/houcem/data/combined_csv.csv"
     val_csv_path = "/home/houcem/data_val/data.csv"
     flag = 0
