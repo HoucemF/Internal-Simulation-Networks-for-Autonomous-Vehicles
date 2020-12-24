@@ -16,7 +16,7 @@ import carla
 from sim_env import Sim_env
 from camera import Camera
 from control import babbling_angle
-
+from datetime import datetime
 
 
 def main(argv):
@@ -87,7 +87,7 @@ def main(argv):
                 
                 while image is None and camera.queue.qsize() > 0:
                     image = camera.get()
-                    Image.fromarray(image).save(save_path / 'rgb' / ('spawn_%d_%04d.png' % (i, index)))
+                    Image.fromarray(image).save(save_path / 'rgb' / ('spawn_%d_%s.png' % (i, str(datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S:%f")))))
     
                 ego_command = babbling_angle()
                 car_command = ego_command[1]

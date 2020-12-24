@@ -113,7 +113,7 @@ def main(argv):
             
             
         best_angle = max(angles_score, key = angles_score.get)
-        driving_angle = autoregressive_filter(previous_angle , best_angle , 0.4)
+        driving_angle = autoregressive_filter(previous_angle , best_angle , alpha)
         print(driving_angle)
         
         env.ego.apply_control(carla.VehicleControl(throttle = 0.2, steer = driving_angle, brake = 0, reverse = 0))

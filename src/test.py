@@ -6,11 +6,7 @@ Created on Thu Nov 19 22:10:14 2020
 @author: houcem
 """
 
+from datetime import datetime 
 
-from sim_env import Sim_env
-from time import sleep
-import carla
-
-env = Sim_env(town = "Town03")
-print(len(env.world.get_map().get_spawn_points()))
-env.clean_up()
+a = str(datetime.now())
+print(type(a))

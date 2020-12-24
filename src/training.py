@@ -21,6 +21,8 @@ from training_generators import *
 from sensorimotor_model_v2 import sensorimotor_model_v2
 import tensorflow.keras as keras
 import tensorflow as tf
+from datetime import datetime
+from pathlib import Path
 
 #Custom loss function
 def SSIM_l1_loss(y_true, y_pred):
@@ -31,20 +33,20 @@ def main(argv):
     batch_size = 50
     train_csv_path = "/home/houcem/data/combined_csv.csv"
     val_csv_path = "/home/houcem/data_val/data.csv"
-    flag = 0
-    pickle_path = "/home/houcem/data/motor_output.p"
+    flag = 2
+    save_path = "/home/houcem/"
     
 
     #Reading arguments
     try:
-        opts, args = getopt.getopt(argv, "ht:e:f:m:")
+        opts, args = getopt.getopt(argv, "ht:e:f:s:")
     except getopt.GetoptError:
-        print("data_collection -t <path to training csv> -e <path to evaluation csv> -f <0 : Nothing frozen 1: Freezes Encoder 2: Freezes Encoder and Decoder> -m <path to motor input pickle>")       
+        print("data_collection -t <path to training csv> -e <path to evaluation csv> -f <0 : Nothing frozen 1: Freezes Encoder 2: Freezes Encoder and Decoder> -s <save_path>")       
         sys.exit(2)
         
     for opt, arg in opts:
         if opt == '-h':
-             print("data_collection -t <path to training csv> -e <path to evaluation csv> -f <0 : Nothing frozen 1: Freezes Encoder 2: Freezes Encoder and Decoder> -m <path to motor input pickle>")       
+             print("data_collection -t <path to training csv> -e <path to evaluation csv> -f <0 : Nothing frozen 1: Freezes Encoder 2: Freezes Encoder and Decoder> -s <save_path>")       
              sys.exit()
         elif opt == "-t":
              train_csv_path = str(arg)
@@ -53,7 +55,7 @@ def main(argv):
         elif opt == "-f":
              flag = int(arg)
         elif opt == "-s":
-             pickle_path = str(arg)
+             save_path = str(arg)
                  
     train_sample_size = sum(1 for row in open(train_csv_path)) - 1
     val_sample_size = sum(1 for row in open(val_csv_path)) - 1            
@@ -83,18 +85,12 @@ def main(argv):
     
     print('vectorizing the target images')
     print("...")
-    train_y = encoder.predict(train_y_generator(train_csv_path, batch_size), steps = train_sample_size/batch_size)
+    train_y = models.encoder.predict(train_y_generator(train_csv_path, batch_size), steps = train_sample_size/batch_size)
     print("...")
     train_y = train_y[0:train_sample_size,:]
 
     print('loading motor data')
-    data = open("/home/houcem/data/motor_output.p", "rb+")
-    print("...")
-    unpickler = pickle.Unpickler(data)
-    print("...")
-    training = unpickler.load()
-    print("...")
-    data.close()
+    training = motor_parser(train_csv_path)
     
     training = np.asarray(training)    
 
@@ -121,11 +117,11 @@ def main(argv):
             print('nothing frozen')
 
     print('training the babbling network')
-    models.model.compile(loss = SSIM_l1_loss, optimizer = keras.optimizers.Adam(learning_rate = 1e-5))
+    models.model.compile(loss = SSIM_l1_loss, optimizer = keras.optimizers.Adam(learning_rate = 1e-4))
     models.model.fit(babbling_generator(train_csv_path, batch_size), steps_per_epoch= train_sample_size/batch_size, validation_data=babbling_generator(val_csv_path,batch_size), validation_steps=val_sample_size/batch_size, epochs = 10)
     
     print("saving the weights in the execution directory")
-    models.model.save_weights('Result.h5')
+    models.model.save_weights('%s.h5' % str(datetime.now().strftime("%Y-%m-%d_%H:%M:%S:%f")))
     
     
 if __name__ == "__main__":

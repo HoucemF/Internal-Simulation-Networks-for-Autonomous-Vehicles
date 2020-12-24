@@ -1,20 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Tue Nov 24 18:39:41 2020
+Created on Wed Dec 23 19:15:17 2020
 
 @author: houcem
 """
 
+import pickle
 import os, sys, getopt
 import glob
-import pandas as pd
-
-"""
-This script requires you to put all the csvs generated
-in one folder and it will combine all the csvs into one csv
-and outputs a csv a specified directory
-"""
+import numpy as np
 
 def main(argv):
     
@@ -22,27 +17,35 @@ def main(argv):
     try:
         opts, args = getopt.getopt(argv, "hp:o:")
     except getopt.GetoptError:
-        print("csv_combiner -p <CSVs path> -o <output path>")
+        print("pickle_combiner -p <CSVs path> -o <output path>")
         sys.exit(2)
 
     for opt, arg in opts:
         if opt == '-h':
-            print ("csv_combiner -p <CSVs path> -o <output path>")
+            print ("pickle_combiner -p <CSVs path> -o <output path>")
             sys.exit()
         elif opt == "-p":
             save_path = str(arg)
         elif opt == '-o':
             output_path = str(arg)
             
+    result_array = []
+    
     os.chdir(save_path)
     
-    extension = 'csv'
+    extension = 'p'
     all_filenames = [i for i in glob.glob('*.{}'.format(extension))]
     
-    #combine all files in the list
-    combined_csv = pd.concat([pd.read_csv(f) for f in all_filenames ])
-    #export to csv
-    combined_csv.to_csv( output_path + "/combined_csv.csv", index=False)
+    for file in all_filenames:
+        data = open(file, 'rb+')
+        unpickler = pickle.Unpickler(data)
+        result_array.append(unpickler.load())
+        data.close()
+        
+    result = result_array[0]
     
+    for i in range(1, len(result_array)):
+        np.concatenate(result, result_array[i])
+
 if __name__ == "__main__":
     main(sys.argv[1:])

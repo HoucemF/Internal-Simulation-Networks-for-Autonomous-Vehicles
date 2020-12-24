@@ -157,5 +157,5 @@ def motor_parser(csv_path):
     next(f)
     for line in f:
         img_x_path, throttle, steering_angle, img_y_path = line.split(',')
-        motor_input.append(np.asarray([throttle, steering_angle]))
+        motor_input.append(np.asarray([float(throttle), float(steering_angle)]))
     return np.asarray(motor_input)        

@@ -15,6 +15,7 @@ import getopt
 import carla
 from pathlib import Path
 from PIL import Image
+import datetime
 
 """
 This script will mine the sensor output
@@ -29,14 +30,14 @@ Running the script takes arguments:
 def main(argv):
     
     episodes = 50000
-    frame_skip = 5
+    frame_skip = 1
     home_path = Path.home()
     save_path = (home_path / 'data_val')
     segmentation = True
     
     #Reading arguments
     try:
-        opts, args = getopt.getopt(argv, "he:f:p:s:")
+        opts, args = getopt.getopt(argv, "he:p:f:")
     except getopt.GetoptError:
         print("data_collection -p <Save path> -e <number of episodes> -f <number of frames skipped>")       
         sys.exit(2)
@@ -87,9 +88,6 @@ def main(argv):
         env.ego.get_location() + carla.Location(z=50),
         carla.Rotation(pitch=-90)))
         
-        if i % 500 == 0:
-            env.tm.force_lane_change(env.ego, random.choice([True,  False]))
-        
         #Every cycle of frames apply motor control and get sensor output
         if i % frame_skip == 0:
             
@@ -99,11 +97,11 @@ def main(argv):
             
             while image is None and camera.queue.qsize() > 0:
                 image = camera.get()
-                Image.fromarray(image).save(save_path / 'semantic' / ('%04d.png' % index))
+                Image.fromarray(image).save(save_path / 'semantic' / ('%s.png' % str(datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S:%f"))))
                 
             while rgb_image is None and rgb_camera.queue.qsize() > 0:
                 rgb_image = rgb_camera.get()
-                Image.fromarray(rgb_image).save(save_path / 'rgb' / ('%04d.png' % index))
+                Image.fromarray(rgb_image).save(save_path / 'rgb' / ('%s.png' % str(datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S:%f"))))
                 
             command = env.ego.get_control()
             
