@@ -20,12 +20,18 @@ cd PythonAPI/carla/dist
 
 easy_install carla-0.9.10-py3.7-linux-x86_64.egg
 ```
+
+## Definitions
+Episode: A Carla episode is a simulation sequence where the vehicle applies a form of control and captures the input from the sensors and then allows the simulation to run for a finite time period
+
+Frame_skip: is the frequency of frames when the data is collected. If frame_skip = 1, the script will attempt to collect the motor command and the image at every frame
+
 ## Data collection guide
 
 There are two scripts to collect rgb images, segmented images and the associated steering angles and throttles from the simulation. 
 
 ### Script 1: Using Auto-pilot
-This script uses autopilot to drive around the map staying within its lane but ignoring road signs and traffic lights.
+This script uses autopilot to drive around the map staying within its lane but ignoring road signs and traffic lights. For trial purposes, let's collect a toy dataset of 1000 episodes and by default the number of frames skipped is 1 (No frames skipped). 
 ```
 python src/data_collection.py -p <Save path> -e <number of episodes> -f <number of frames skipped>
 ```
@@ -47,7 +53,11 @@ python src/build_csv_babbling -p <Directory of the saved data>
 ```
 
 ## Training Guide
-TODO
+
+To train the model, all you have to do is run the following 
+```
+training -t <path to training csv> -e <path to evaluation csv> -f <0 : Nothing frozen 1: Freezes Encoder 2: Freezes Encoder and Decoder> -s <save_path>
+```
 
 # Execution Guide
 
