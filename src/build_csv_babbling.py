@@ -10,6 +10,9 @@ from glob import glob
 import pandas as pd
 from pathlib import Path
 import pickle
+import sys
+import getopt
+from datetime import datetime
 
 
 """
@@ -56,7 +59,7 @@ class build_csv:
                                    ignore_index=True)
         
         #Export the data to a csv
-        data.to_csv(str(path/ 'data.csv'), index= False)
+        data.to_csv(str(path/ '%s.csv' % str(datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S-%f"))), index= False)
         
     def __init__(self, path):
         
@@ -67,9 +70,25 @@ class build_csv:
         return 
     
 
-def main():
-    path = Path("/home/houcem/data_babbling_5/")
+def main(argv):
+    path = Path("/home/houcem/data_val/")
+
+    
+    #Reading arguments
+    try:
+        opts, args = getopt.getopt(argv, "hp:")
+    except getopt.GetoptError:
+        print("build_csv -p <Save path>")       
+        sys.exit(2)
+        
+    for opt, arg in opts:
+        if opt == '-h':
+             print ("build_csv -p <Save path>")    
+             sys.exit()
+        elif opt == "-p":
+             path = Path(arg)
+       
     csv_builder = build_csv(path)
     
 if __name__ == "__main__" :
-    main();
+    main(sys.argv[1:]);

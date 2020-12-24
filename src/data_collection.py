@@ -97,11 +97,11 @@ def main(argv):
             
             while image is None and camera.queue.qsize() > 0:
                 image = camera.get()
-                Image.fromarray(image).save(save_path / 'semantic' / ('%s.png' % str(datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S:%f"))))
+                Image.fromarray(image).save(save_path / 'semantic' / ('%s.png' % str(datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S-%f"))))
                 
             while rgb_image is None and rgb_camera.queue.qsize() > 0:
                 rgb_image = rgb_camera.get()
-                Image.fromarray(rgb_image).save(save_path / 'rgb' / ('%s.png' % str(datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S:%f"))))
+                Image.fromarray(rgb_image).save(save_path / 'rgb' / ('%s.png' % str(datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S-%f"))))
                 
             command = env.ego.get_control()
             

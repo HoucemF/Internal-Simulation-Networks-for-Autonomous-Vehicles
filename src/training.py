@@ -41,12 +41,12 @@ def main(argv):
     try:
         opts, args = getopt.getopt(argv, "ht:e:f:s:")
     except getopt.GetoptError:
-        print("data_collection -t <path to training csv> -e <path to evaluation csv> -f <0 : Nothing frozen 1: Freezes Encoder 2: Freezes Encoder and Decoder> -s <save_path>")       
+        print("training -t <path to training csv> -e <path to evaluation csv> -f <0 : Nothing frozen 1: Freezes Encoder 2: Freezes Encoder and Decoder> -s <save_path>")       
         sys.exit(2)
         
     for opt, arg in opts:
         if opt == '-h':
-             print("data_collection -t <path to training csv> -e <path to evaluation csv> -f <0 : Nothing frozen 1: Freezes Encoder 2: Freezes Encoder and Decoder> -s <save_path>")       
+             print("training -t <path to training csv> -e <path to evaluation csv> -f <0 : Nothing frozen 1: Freezes Encoder 2: Freezes Encoder and Decoder> -s <save_path>")       
              sys.exit()
         elif opt == "-t":
              train_csv_path = str(arg)
@@ -121,7 +121,7 @@ def main(argv):
     models.model.fit(babbling_generator(train_csv_path, batch_size), steps_per_epoch= train_sample_size/batch_size, validation_data=babbling_generator(val_csv_path,batch_size), validation_steps=val_sample_size/batch_size, epochs = 10)
     
     print("saving the weights in the execution directory")
-    models.model.save_weights('%s.h5' % str(datetime.now().strftime("%Y-%m-%d_%H:%M:%S:%f")))
+    models.model.save_weights('%s.h5' % str(datetime.now().strftime("%Y-%m-%d_%H-%M-%S-%f")))
     
     
 if __name__ == "__main__":

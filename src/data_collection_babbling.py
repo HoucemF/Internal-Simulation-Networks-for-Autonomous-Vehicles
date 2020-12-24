@@ -87,7 +87,7 @@ def main(argv):
                 
                 while image is None and camera.queue.qsize() > 0:
                     image = camera.get()
-                    Image.fromarray(image).save(save_path / 'rgb' / ('spawn_%d_%s.png' % (i, str(datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S:%f")))))
+                    Image.fromarray(image).save(save_path / 'rgb' / ('spawn_%d_%s.png' % (i, str(datetime.now().strftime("%Y-%m-%d_%H-%M-%S-%f")))))
     
                 ego_command = babbling_angle()
                 car_command = ego_command[1]
