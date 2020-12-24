@@ -120,6 +120,9 @@ def main(argv):
     models.model.compile(loss = SSIM_l1_loss, optimizer = keras.optimizers.Adam(learning_rate = 1e-4))
     models.model.fit(babbling_generator(train_csv_path, batch_size), steps_per_epoch= train_sample_size/batch_size, validation_data=babbling_generator(val_csv_path,batch_size), validation_steps=val_sample_size/batch_size, epochs = 10)
     
+    models.encoder.trainable = False
+    models.decoder.trainable = True
+    
     print("saving the weights in the execution directory")
     models.model.save_weights('%s.h5' % str(datetime.now().strftime("%Y-%m-%d_%H-%M-%S-%f")))
     

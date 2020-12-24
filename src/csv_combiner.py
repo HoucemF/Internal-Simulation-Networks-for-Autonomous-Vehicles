@@ -35,6 +35,7 @@ def main(argv):
             output_path = str(arg)
             
     os.chdir(save_path)
+    os.mkdir(output_path)
     
     extension = 'csv'
     all_filenames = [i for i in glob.glob('*.{}'.format(extension))]

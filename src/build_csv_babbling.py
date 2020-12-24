@@ -59,7 +59,7 @@ class build_csv:
                                    ignore_index=True)
         
         #Export the data to a csv
-        data.to_csv(str(path/ '%s.csv' % str(datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S-%f"))), index= False)
+        data.to_csv(str(path/ ('%s.csv' % (str(datetime.now().strftime("%Y-%m-%d_%H-%M-%S-%f"))))), index= False)
         
     def __init__(self, path):
         
