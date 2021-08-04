@@ -1,3 +1,7 @@
+# Project Overview and Scope
+
+This project is made for ECE591 - Directed Studies Module under the advisorship of Dr. Jaerock Kwon in BIMILab at the University of Michigan - Dearborn. The goal of the project is to predict the next frame vector seen by the vehicle using the current frame and the motor action taken by the vehicle. We use this mechanism for a lane keeping application that uses a grid search on a range of steering angles and compares the predicted frame vector to a reference vector using the cosine similarity metric. We use an autoencoder for vectorization of the images and a multi-layer perceptron to predict the next frame vectors.
+
 # Folders Structure
 
 The folder src contains code that is written and tested.\
@@ -71,3 +75,10 @@ Then execute the driver script and load Models/Model_v2.h5. There are three refe
 ```
 python src/driver.py -w <Weights path> -r <Reference image path> -a <Alpha value>
 ```
+#Demo GIFs
+
+Some Bird Eye vue images of the vehicle in different situations
+
+![Car straight lane](https://user-images.githubusercontent.com/72029066/128208791-9e372844-3abf-4d75-955a-871412ba81d9.gif)
+
+![Intersection](https://user-images.githubusercontent.com/72029066/128210684-09b41e46-6281-4e6e-ac70-27f5ed06a416.gif)
