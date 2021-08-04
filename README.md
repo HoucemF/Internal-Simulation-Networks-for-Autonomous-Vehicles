@@ -1,7 +1,9 @@
-# Houcem
+# Folders Structure
 
 The folder src contains code that is written and tested.\
-The folder experimentation has exploratory code or a work in progress
+The folder experimentation has exploratory code or a work in progress \
+The Models folder contains the trained neural networks in Keras and Tensorflow \
+The environment folder contains a yaml file that can load the work environment in Anaconda \
 
 # Instructions
 
