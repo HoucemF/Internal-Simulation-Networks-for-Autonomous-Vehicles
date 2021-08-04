@@ -75,7 +75,7 @@ Then execute the driver script and load Models/Model_v2.h5. There are three refe
 ```
 python src/driver.py -w <Weights path> -r <Reference image path> -a <Alpha value>
 ```
-#Demo GIFs
+# Demo GIFs
 
 Some Bird Eye vue images of the vehicle in different situations
 
